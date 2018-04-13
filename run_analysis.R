@@ -3,8 +3,10 @@ library(dplyr)
 #Loading Data
 TrainSet <- read.table('X_train.txt')
 TrainLabels <- read.table('y_train.txt')
+TrainSubject <- read.table('subject_train.txt')
 TestSet <- read.table('X_test.txt')
 TestLabels <- read.table('y_test.txt')
+TestSubject <- read.table('subject_test.txt')
 Features <- read.table('features.txt')
 
 #-------------------------------------------------------------------------------
@@ -12,8 +14,8 @@ Features <- read.table('features.txt')
 #TestTrain data.frame creation
 #merging set and labels
 
-Test <- cbind(TestLabels, TestSet)
-Train <- cbind(TrainLabels, TrainSet)
+Test <- cbind(TestSubject, TestLabels, TestSet)
+Train <- cbind(TrainSubject, TrainLabels, TrainSet)
 
 #merging Test and Train (Merges the training and the test sets to create one data set)
 
@@ -25,14 +27,16 @@ TestTrain <- rbind(Test, Train)
 
 Features <- t(Features)
 Features <- as.character(Features[2,])
-names(TestTrain)[1] <- 'Activity'
-names(TestTrain)[2:length(names(TestTrain))] <- Features
+names(TestTrain)[1] <- 'Subject'
+names(TestTrain)[2] <- 'Activity'
+names(TestTrain)[3:length(names(TestTrain))] <- Features
 
 #Tidying up Activities (Uses descriptive activity names to name the activities in the data set)
 
 # str(TestTrain) check for the following funcion
 TestTrain[,1] <- as.factor(TestTrain[,1])
-levels(TestTrain[,1]) <- c('1' = 'WALKING', '2' = 'WALKING_UPSTAIRS', '3' = 'WALKING_DOWNSTAIRS',
+TestTrain[,2] <- as.factor(TestTrain[,2])
+levels(TestTrain[,2]) <- c('1' = 'WALKING', '2' = 'WALKING_UPSTAIRS', '3' = 'WALKING_DOWNSTAIRS',
                            '4' = 'SITTING', '5' = 'STANDING', '6' = 'LAYING')
 # str(TestTrain) check for the previous funcion
 
@@ -44,7 +48,7 @@ levels(TestTrain[,1]) <- c('1' = 'WALKING', '2' = 'WALKING_UPSTAIRS', '3' = 'WAL
 
 mean <- grep( '[Mm][Ee][Aa][Nn]' , colnames(TestTrain), value = T)
 stdev <- grep('[Ss][Tt][Dd]', colnames(TestTrain), value = T)
-meanst <- c('Activity', mean, stdev)
+meanst <- c('Subject', 'Activity', mean, stdev)
 
 #duplicate column names issue, checking if the columns have 'mean' or 'std' inside
 
@@ -67,10 +71,11 @@ TestTrain2 <- select(TestTrain2, meanst)
 
 #Creating the New Data Set (From the data set in step 4, creates a second, independent tidy data set with the average of each variable for each activity and each subject.)
 
-Final <- TestTrain2 %>% group_by(Activity) %>%
+Final <- TestTrain2 %>% group_by(Subject, Activity) %>%
         summarise_all(mean.default)
 
 #-------------------------------------------------------------------------------
 
 #Writing CSV file
-write.csv(Final, file = 'CleanData.csv')
+write.table(Final, file = 'CleanData.txt', row.names = F)
+
