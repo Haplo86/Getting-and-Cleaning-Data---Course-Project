@@ -74,32 +74,3 @@ Final <- TestTrain2 %>% group_by(Activity) %>%
 
 #Writing CSV file
 write.csv(Final, file = 'CleanData.csv')
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
