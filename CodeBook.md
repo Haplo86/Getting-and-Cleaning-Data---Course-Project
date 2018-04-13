@@ -72,6 +72,6 @@ For this script we used the following files within the .zip folder downloaded:
 * %>%, group_by(), mean.default(), summarise()
 
 
-## Writing final data to CSV
+## Writing final data to CSV 
 
 At the end of the script a CSV file is created, named 'CleanData.CSV'
