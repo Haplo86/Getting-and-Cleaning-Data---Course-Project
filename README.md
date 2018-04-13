@@ -1,7 +1,7 @@
 # Getting-and-Cleaning-Data---Course-Project
 Coursera Course Project
 
-##Introduction
+## Introduction
 For using the R script, 'run_analysis.R', contained in this Repo you must follow this brief introduction:
 * Download and unpack the dataset (links in the CodeBook).
 * Put in the working directory the .txt files specified in the CodeBook.
